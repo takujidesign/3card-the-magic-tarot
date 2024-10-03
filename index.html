@@ -26,7 +26,7 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2); /* เพิ่มแสงเงารอบกล่อง */
-            max-width: 400px;
+            max-width: 600px;
         }
 
         h1 {
@@ -43,6 +43,8 @@
         #tarot-card {
             font-size: 1.5em;
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         /* ปุ่มสุ่มไพ่ */
@@ -77,9 +79,9 @@
         }
 
         img {
-            width: 200px;
+            width: 150px;
             height: auto;
-            margin-top: 20px;
+            margin: 0 10px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* แสงรอบภาพไพ่ */
         }
@@ -105,6 +107,7 @@
             width: 100%; /* ทำให้ GIF กว้างเต็มที่ */
             border-radius: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -112,11 +115,12 @@
     <!-- กล่องเนื้อหาสำหรับสุ่มไพ่ -->
     <div class="container">
         <h1>The Magic Tarot</h1>
-        <p>ตั้งสมาธิและคลิกเพื่อทำนาย / Predict your horoscope.</p>
+        <p id="draw-status">จับไพ่ใบที่ 1</p>
         
         <!-- ปุ่มสุ่มไพ่มีรูปภาพ -->
         <button id="draw-btn" onclick="drawCard()">
             Draw a Card
+            <img src="images/card_back.jpg" alt="Card Back">
         </button>
         
         <!-- ปุ่ม "ทำนายอีกครั้ง" -->
@@ -217,6 +221,7 @@
             const drawButton = document.getElementById('draw-btn');
             const shufflingGif = document.getElementById('shuffling-gif');
             const drawAgainButton = document.getElementById('draw-again-btn');
+            const drawStatus = document.getElementById('draw-status');
             drawButton.disabled = true; // ปิดการใช้งานปุ่มชั่วคราว
             shufflingGif.style.display = 'block'; // แสดง GIF การสับไพ่
 
@@ -232,17 +237,22 @@
                 selectedCards.push(card); // เก็บไพ่ที่สุ่มแล้ว
                 drawCount++;
 
-                // แสดงผลไพ่ที่สุ่มได้ พร้อมรูปภาพ
+                // แสดงผลไพ่ที่สุ่มได้ในแนวนอน
                 document.getElementById('tarot-card').innerHTML += `
-                    <p>You drew: ${card.name}</p>
-                    <img src="${card.img}" alt="${card.name}">
+                    <div style="display: inline-block; text-align: center;">
+                        <img src="${card.img}" alt="${card.name}">
+                    </div>
                 `;
 
                 drawButton.disabled = false; // เปิดการใช้งานปุ่มอีกครั้ง
 
-                if (drawCount === 3) {
+                // เปลี่ยนข้อความแสดงสถานะการจับไพ่
+                if (drawCount < 3) {
+                    drawStatus.textContent = `จับไพ่ใบที่ ${drawCount + 1}`;
+                } else {
                     drawButton.style.display = 'none'; // ซ่อนปุ่มสุ่มไพ่หลังจากสุ่มครบ 3 ครั้ง
                     drawAgainButton.style.display = 'block'; // แสดงปุ่ม "ทำนายอีกครั้ง"
+                    drawStatus.textContent = 'คุณจับไพ่ครบ 3 ใบแล้ว';
                 }
             }, 2000); // ตั้งเวลาให้รอ 2 วินาทีเพื่อจำลองการ "Shuffle"
         }
@@ -253,6 +263,7 @@
             document.getElementById('tarot-card').innerHTML = '';
             document.getElementById('draw-again-btn').style.display = 'none'; // ซ่อนปุ่ม "ทำนายอีกครั้ง"
             document.getElementById('draw-btn').style.display = 'flex'; // แสดงปุ่มสุ่มไพ่ใหม่
+            document.getElementById('draw-status').textContent = 'จับไพ่ใบที่ 1';
         }
 
         // ป้องกันการคลิกขวาบนหน้าเว็บ
