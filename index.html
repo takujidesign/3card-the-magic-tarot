@@ -222,7 +222,9 @@
             const shufflingGif = document.getElementById('shuffling-gif');
             const drawAgainButton = document.getElementById('draw-again-btn');
             const drawStatus = document.getElementById('draw-status');
-            drawButton.disabled = true; // ปิดการใช้งานปุ่มชั่วคราว
+
+            // ซ่อนปุ่มตอนแสดง GIF สับไพ่
+            drawButton.style.display = 'none';
             shufflingGif.style.display = 'block'; // แสดง GIF การสับไพ่
 
             // ตั้งเวลาแสดงไพ่ (เช่น 2 วินาทีหลังจากกดปุ่ม)
@@ -244,6 +246,8 @@
                     </div>
                 `;
 
+                // แสดงปุ่มสุ่มไพ่กลับมา
+                drawButton.style.display = 'flex';
                 drawButton.disabled = false; // เปิดการใช้งานปุ่มอีกครั้ง
 
                 // เปลี่ยนข้อความแสดงสถานะการจับไพ่
